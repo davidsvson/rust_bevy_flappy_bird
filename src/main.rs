@@ -77,15 +77,7 @@ fn fly_on_space(keyboard_input: Res<Input<KeyCode>>, mut players: Query<&mut Pla
     }
 }
 
-fn spawn_pillar(mut commands: Commands) {//, time: Res<Time>, mut timer: ResMut<PillarSpawnTimer>) {
-
-    // timer.0.tick(time.delta());
-    // println!("tick");
-    //
-    // if !timer.0.finished() {
-    //     println!("finish");
-    //     return
-    // }
+fn spawn_pillar(mut commands: Commands) {
 
     println!("Spawn!");
 
@@ -102,11 +94,9 @@ fn spawn_pillar(mut commands: Commands) {//, time: Res<Time>, mut timer: ResMut<
             custom_size: Some(Vec2::new(pillar.with, pillar.height)),
             ..default()
         },
-        transform: Transform::from_xyz(-500.0, 500.0, 0.0),
+        transform: Transform::from_xyz(500.0, -100.0, 0.0),
         ..default()
     }, pillar
     ));
-
-
 }
 
