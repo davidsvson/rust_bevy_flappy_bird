@@ -1,5 +1,8 @@
 use bevy::prelude::*;
 use bevy::time::FixedTimestep;
+use rand::Rng;
+use rand::prelude::random;
+
 
 fn main() {
     App::new()
@@ -14,6 +17,7 @@ fn main() {
                 .with_run_criteria(FixedTimestep::step(3.0))
                 .with_system(spawn_pillar),
         )
+        .add_system(move_pillar)
         .run();
 }
 
@@ -31,6 +35,7 @@ struct Pillar {
     height: f32,
     with: f32,
     direction: Direction,
+    speed: f32,
 }
 
 enum Direction {
@@ -78,14 +83,13 @@ fn fly_on_space(keyboard_input: Res<Input<KeyCode>>, mut players: Query<&mut Pla
 }
 
 fn spawn_pillar(mut commands: Commands) {
-
-    println!("Spawn!");
-
+   // let mut rng = rand::thread_rng;
 
     let pillar = Pillar {
-        height: 100.0,
-        with: 50.0,
+        height: random::<f32>() * 250.0,
+        with: 30.0,
         direction: Direction::Up,
+        speed: 100.0,
     };
 
     commands.spawn((SpriteBundle {
@@ -94,9 +98,15 @@ fn spawn_pillar(mut commands: Commands) {
             custom_size: Some(Vec2::new(pillar.with, pillar.height)),
             ..default()
         },
-        transform: Transform::from_xyz(500.0, -100.0, 0.0),
+        transform: Transform::from_xyz(500.0, random::<f32>() * 500.0 - 250.0, 0.0),
         ..default()
     }, pillar
     ));
+}
+
+fn move_pillar(time: Res<Time>, mut pillars: Query<(&mut Pillar, &mut Transform)>) {
+    for (mut pillar, mut transform) in &mut pillars {
+        transform.translation.x -= pillar.speed * time.delta_seconds();
+    }
 }
 
